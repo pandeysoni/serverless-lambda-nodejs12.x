@@ -1,0 +1,42 @@
+service: user-service
+
+provider:
+  name: aws
+  profile: ${self:custom.config.profile}
+  runtime: nodejs12.x
+  region: ${self:custom.config.region}
+  stage: ${self:custom.config.stage}
+  memorySize: 128
+  timeout: 30
+  versionFunctions: false
+  environment:
+    STAGE: ${self:custom.config.stage}
+    TABLE_USER: ${self:custom.config.tables.users.name}-${self:custom.config.stage}
+
+functions:
+  user-create:
+    handler: functions/create.main
+    events:
+      - http:
+          path: /users
+          method: post
+          cors: true
+  
+  user-get:
+    handler: functions/get.main
+    events:
+      - http:
+          path: /users
+          method: get
+          cors: true
+  
+  user-get-by-id:
+    handler: functions/getById.main
+    events:
+      - http:
+          path: /users/{id}
+          method: get
+          cors: true
+
+custom:
+  config: ${file(./config.yml)}

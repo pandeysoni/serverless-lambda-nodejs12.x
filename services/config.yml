@@ -1,0 +1,9 @@
+---
+stage: dev
+region: us-west-2
+profile: default
+tables:
+  users:
+    name: users
+    readCapacity: 1
+    writeCapacity: 1
